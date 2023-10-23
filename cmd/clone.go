@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/matthewchivers/rb/gitutils"
+	gitutils "github.com/matthewchivers/rb/gitcore"
 	"github.com/spf13/cobra"
 )
 
@@ -26,17 +26,23 @@ func init() {
 	RootCmd.AddCommand(cloneCmd)
 }
 
+// CloneHandler handles the clone command
 func CloneHandler(cmd *cobra.Command, args []string) {
 	repositoryURL := args[0]
+
+	// Until we implement rules, we require a custom path to be specified
+	cloneTargetPath := customPath
 	if customPath == "" {
-		fmt.Errorf("Error: No target path specified\n")
+		fmt.Println("custom path must be specified")
 		return
 	}
-	cloneTargetPath := customPath // Simplify by directly using customPath
+
 	if rule != "" {
+		// TODO: Implement rules - this is a placeholder for now to show how we can use the rule flag
 		fmt.Printf("TODO: Implement rule: %s\n", rule)
 	}
-	if err := gitutils.CloneGitRepo(repositoryURL, cloneTargetPath); err != nil { // Simplified error handling
+	if err := gitutils.CloneGitRepo(repositoryURL, cloneTargetPath); err != nil {
 		fmt.Println("Error cloning repository:", err)
 	}
+	fmt.Println("Repository cloned successfully!")
 }
