@@ -1,10 +1,10 @@
 # Set the binary name
 BINARY_NAME=rb
 
-# Build the binary
+# Build the binary to the bin directory
 build:
 	@echo "Building..."
-	@go build -o $(BINARY_NAME)
+	@go build -o bin/$(BINARY_NAME)
 
 # Run main.go (no build)
 run:
@@ -25,16 +25,29 @@ test:
 # Format the code
 fmt:
 	@echo "Formatting..."
-	@go fmt ./...
+	@OUTPUT=$$(go fmt ./...); \
+	if [ -z "$$OUTPUT" ]; then \
+		echo "No formatting errors found"; \
+	else \
+		echo "$$OUTPUT"; \
+		exit 1; \
+	fi
 
 # Vet the code
 vet:
 	@echo "Vetting..."
-	@go vet ./...
+	@OUTPUT=$$(go vet ./...); \
+	if [ -z "$$OUTPUT" ]; then \
+		echo "No vetting errors found"; \
+	else \
+		echo "$$OUTPUT"; \
+		exit 1; \
+	fi
 
 # Lint the code
 lint:
 	@echo "Linting..."
+	@command -v golint >/dev/null 2>&1 || { echo >&2 "golint is required but not installed. Aborting. Install with go get -u golang.org/x/lint/golint"; exit 1; }
 	@OUTPUT=$$(golint ./...); \
 	if [ -z "$$OUTPUT" ]; then \
 		echo "No linting errors found"; \
