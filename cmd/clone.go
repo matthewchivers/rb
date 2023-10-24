@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
-	gitutils "github.com/matthewchivers/rb/gitcore"
+	"github.com/matthewchivers/rb/cmd/handlers"
+	"github.com/matthewchivers/rb/cmd/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +19,15 @@ var cloneCmd = &cobra.Command{
 	Short: "Clone a repository into a directory",
 	Long:  "Clone a repository into a directory based on the user-specified ruleset",
 	Args:  cobra.ExactArgs(1),
-	Run:   CloneHandler,
+	Run: func(cmd *cobra.Command, args []string) {
+		repositoryURL := args[0]
+		cloneTargetPath, err := checkCustomPath(customPath)
+		if err != nil {
+			fmt.Println("Error: ", err)
+			return
+		}
+		handlers.Clone(repositoryURL, cloneTargetPath, rule)
+	},
 }
 
 func init() {
@@ -26,23 +36,15 @@ func init() {
 	RootCmd.AddCommand(cloneCmd)
 }
 
-// CloneHandler handles the clone command
-func CloneHandler(cmd *cobra.Command, args []string) {
-	repositoryURL := args[0]
-
-	// Until we implement rules, we require a custom path to be specified
-	cloneTargetPath := customPath
+// checkCustomPath checks if a custom path has been specified. If so, returns the expanded path
+func checkCustomPath(customPath string) (string, error) {
 	if customPath == "" {
-		fmt.Println("custom path must be specified")
-		return
+		return "", errors.New("custom path must be specified")
 	}
-
-	if rule != "" {
-		// TODO: Implement rules - this is a placeholder for now to show how we can use the rule flag
-		fmt.Printf("TODO: Implement rule: %s\n", rule)
+	osfs := utils.OSFileSystem{}
+	cloneTargetPath, err := utils.ExpandPath(osfs, customPath)
+	if err != nil {
+		return "", fmt.Errorf("error expanding path: %w", err)
 	}
-	if err := gitutils.CloneGitRepo(repositoryURL, cloneTargetPath); err != nil {
-		fmt.Println("Error cloning repository:", err)
-	}
-	fmt.Println("Repository cloned successfully!")
+	return cloneTargetPath, nil
 }
