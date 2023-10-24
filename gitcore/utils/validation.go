@@ -20,13 +20,21 @@ func isValidGitHubURL(repoURL string) bool {
 
 func checkSSHURL(repoURL, user, host string) bool {
 	// git@<host>:<owner>/<repo>.git
-	parts := strings.Split(repoURL, ":")
-	if len(parts) != 2 {
-		return false
-	} else if parts[0] != user+"@"+host {
+	colonSplitParts := strings.Split(repoURL, ":")
+	if len(colonSplitParts) != 2 {
 		return false
 	}
-	if !strings.HasSuffix(parts[1], ".git") {
+	if colonSplitParts[0] != user+"@"+host {
+		return false
+	}
+	slashSplitParts := strings.Split(colonSplitParts[1], "/")
+	if len(slashSplitParts) != 2 {
+		return false
+	}
+	if slashSplitParts[0] == "" || slashSplitParts[1] == "" {
+		return false
+	}
+	if !strings.HasSuffix(colonSplitParts[1], ".git") {
 		return false
 	}
 	return true
@@ -39,6 +47,16 @@ func checkHTTPSURL(repoURL, host string) bool {
 		return false
 	}
 	if parsedURL.Scheme != "https" {
+		return false
+	}
+	if parsedURL.Host != host {
+		return false
+	}
+	slashSplitParts := strings.Split(parsedURL.Path, "/")
+	if len(slashSplitParts) != 3 {
+		return false
+	}
+	if slashSplitParts[1] == "" || slashSplitParts[2] == "" {
 		return false
 	}
 	if !strings.HasSuffix(parsedURL.Path, ".git") {
