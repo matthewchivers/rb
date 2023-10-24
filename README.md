@@ -4,10 +4,13 @@
 
 Repo Butler (`rb`) is a Command-Line Interface (CLI) tool designed to manage code repositories based on a set of configured rules. Kiss manual organisation goodbye; let `rb` take the wheel.
 
-## Roadmap 🚀
+## Features ✨
 
 1. **Cloning of Repositories**:
-   - Implement repository clone functionality, allowing users to clone git repositories to configured directories.
+   - Clone git repositories to configured directories using the `rb clone [git_repo]` command.
+   - Currently requires `--path` to be set, until rules are implemented ([see roadmap](#roadmap-)).
+
+## Roadmap 🚀
 
 2. **Rules/Config Files**:
    - Introduce rule-based sorting where repositories can be managed based on specified rules.
