@@ -12,10 +12,10 @@ Repo Butler (`rb`) is a Command-Line Interface (CLI) tool designed to manage cod
 
 ## Roadmap 🚀
 
-2. **Rules/Config Files**:
+1. **Rules/Config Files**:
    - Introduce rule-based sorting where repositories can be managed based on specified rules.
 
-3. **Opening Managed Repositories in an Editor**:
+1. **Opening Managed Repositories in an Editor**:
    - Develop a feature to open managed repositories directly in a specified editor.
 
 ## Usage 🎮
