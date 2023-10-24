@@ -1,17 +1,17 @@
-package utils
+package mocks
 
 import (
 	"errors"
 	"strings"
 )
 
-type mockFileSystem struct{}
+type MockFSUtil struct{}
 
-func (m *mockFileSystem) UserHomeDir() (string, error) {
+func (m *MockFSUtil) UserHomeDir() (string, error) {
 	return "/home/user", nil
 }
 
-func (m *mockFileSystem) Abs(path string) (string, error) {
+func (m *MockFSUtil) Abs(path string) (string, error) {
 	if path == "" {
 		return "", errors.New("invalid path")
 	}
