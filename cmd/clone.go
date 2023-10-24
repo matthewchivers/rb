@@ -5,7 +5,8 @@ import (
 	"fmt"
 
 	"github.com/matthewchivers/rb/cmd/handlers"
-	"github.com/matthewchivers/rb/cmd/utils"
+	"github.com/matthewchivers/rb/pkg/fsutil"
+	pr "github.com/matthewchivers/rb/pkg/pathresolver"
 	"github.com/spf13/cobra"
 )
 
@@ -41,8 +42,8 @@ func checkCustomPath(customPath string) (string, error) {
 	if customPath == "" {
 		return "", errors.New("custom path must be specified")
 	}
-	osfs := utils.OSFileSystem{}
-	cloneTargetPath, err := utils.ExpandPath(osfs, customPath)
+	osfs := fsutil.OSFileSystem{}
+	cloneTargetPath, err := pr.ExpandPath(osfs, customPath)
 	if err != nil {
 		return "", fmt.Errorf("error expanding path: %w", err)
 	}

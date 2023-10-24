@@ -1,11 +1,13 @@
-package utils
+package pathresolver
 
 import (
 	"testing"
+
+	"github.com/matthewchivers/rb/pkg/mocks"
 )
 
 func TestExpandPath(t *testing.T) {
-	fs := &mockFileSystem{}
+	fs := &mocks.MockFSUtil{}
 	tests := []struct {
 		name     string
 		path     string

@@ -1,12 +1,12 @@
-package utils
+package fsutil
 
 import (
 	"os"
 	"path/filepath"
 )
 
-// FileSystem is an interface for interacting with the filesystem
-type FileSystem interface {
+// FSUtil is an interface for interacting with the filesystem
+type FSUtil interface {
 	UserHomeDir() (string, error)
 	Abs(path string) (string, error)
 }

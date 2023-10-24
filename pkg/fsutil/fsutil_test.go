@@ -1,12 +1,14 @@
-package utils
+package fsutil
 
 import (
 	"errors"
 	"testing"
+
+	"github.com/matthewchivers/rb/pkg/mocks"
 )
 
-func TestFileSystem_UserHomeDir(t *testing.T) {
-	fs := &mockFileSystem{}
+func TestFSUtil_UserHomeDir(t *testing.T) {
+	fs := &mocks.MockFSUtil{}
 	expected := "/home/user"
 	actual, err := fs.UserHomeDir()
 	if err != nil {
@@ -17,8 +19,8 @@ func TestFileSystem_UserHomeDir(t *testing.T) {
 	}
 }
 
-func TestFileSystem_Abs(t *testing.T) {
-	fs := &mockFileSystem{}
+func TestFSUtil_Abs(t *testing.T) {
+	fs := &mocks.MockFSUtil{}
 	tests := []struct {
 		name     string
 		path     string
