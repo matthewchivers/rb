@@ -4,7 +4,7 @@
 
 Repo Butler (`rb`) is a Command-Line Interface (CLI) tool designed to manage code repositories based on a set of configured rules. Kiss manual organisation goodbye; let `rb` take the wheel.
 
-## Features 
+## Features 🌟
 
 The initial release of rb lays the foundation for automated repository management with the introduction of a crucial feature:
 
