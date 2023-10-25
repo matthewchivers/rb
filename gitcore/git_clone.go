@@ -1,28 +1,29 @@
 package gitutils
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/matthewchivers/rb/gitcore/utils"
+	"github.com/matthewchivers/rb/gitcore/utils/giturl"
 )
 
 // CloneGitRepo clones a git repository into a specified directory
 func CloneGitRepo(repoURL, destDir string) error {
-	if !utils.IsValidGitURL(repoURL) {
-		return fmt.Errorf("invalid git URL: %s", repoURL)
+	if _, err := giturl.Parse(repoURL); err != nil {
+		return err
 	}
 
 	if err := ensureDirExists(destDir); err != nil {
 		return err
 	}
 
-	_, err := git.PlainClone(destDir, false, &git.CloneOptions{
+	if _, err := git.PlainClone(destDir, false, &git.CloneOptions{
 		URL:      repoURL,
 		Progress: os.Stdout,
-	})
-	return err
+	}); err != nil {
+		return err
+	}
+	return nil
 }
 
 // ensureDirExists checks if a directory exists, and creates it if it doesn't
