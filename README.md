@@ -1,4 +1,4 @@
-# `rb` - Your (Rule Based) Repository Butler
+# `rb` - The Repository Butler
 
 ## Description
 
