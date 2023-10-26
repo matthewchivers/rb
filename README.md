@@ -32,7 +32,7 @@ Define rules in a `config.yaml` file located at `~/.config/rb/`. Each rule shoul
 ### Examples:
 
 ```yaml
-# Example 1: Clone "https://github.com/matthewchivers/rb" to "~/code/github.com/example-owner/rb"
+# Example 1: Clone "https://github.com/matthewchivers/rb.git" to "~/code/github.com/matthewchivers/rb"
 rules:
   - name: "example rule"
     directory: "~/code"
@@ -40,7 +40,6 @@ rules:
       pattern: "{host}/{owner}"
     match:
       repo:
-        name: "rb"
         owner: "matthewchivers"
 
 # Example 2: Default rule when no other rule matches
