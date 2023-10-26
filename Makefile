@@ -1,57 +1,61 @@
 # Set the binary name
-BINARY_NAME=rb
+BINARY_NAME := rb
+
+# Define Go related variables
+GO := go
+GO_BUILD_FLAGS := -o bin/$(BINARY_NAME)
+GOLINT := golint
+
+.PHONY: build run clean test fmt vet lint
 
 # Build the binary to the bin directory
-build:
+build: fmt test vet lint
 	@echo "Building..."
-	@go build -o bin/$(BINARY_NAME)
+	@$(GO) build $(GO_BUILD_FLAGS); \
+	if [ $$? -eq 0 ]; then \
+		echo "Build successful"; \
+	fi
 
 # Run main.go (no build)
 run:
 	@echo "Running..."
-	@go run main.go
+	@$(GO) run main.go
 
 # Clean up
 clean:
 	@echo "Cleaning..."
-	@rm $(BINARY_NAME) || (echo "Failed to delete $(BINARY_NAME)"; exit 1)
-	@echo "$(BINARY_NAME) deleted successfully"
+	@rm $(BINARY_NAME) && echo "$(BINARY_NAME) deleted successfully" || echo "Failed to delete $(BINARY_NAME)"
 
 # Test the project
 test:
 	@echo "Testing..."
-	@go test ./...
+	@$(GO) test ./...; \
+	if [ $$? -eq 0 ]; then \
+		echo "All tests passed"; \
+	fi
 
 # Format the code
 fmt:
 	@echo "Formatting..."
-	@OUTPUT=$$(go fmt ./...); \
-	if [ -z "$$OUTPUT" ]; then \
+	@$(GO) fmt ./...; \
+	if [ $$? -eq 0 ]; then \
 		echo "No formatting errors found"; \
-	else \
-		echo "$$OUTPUT"; \
-		exit 1; \
 	fi
 
 # Vet the code
 vet:
 	@echo "Vetting..."
-	@OUTPUT=$$(go vet ./...); \
-	if [ -z "$$OUTPUT" ]; then \
+	@$(GO) vet ./...; \
+	if [ $$? -eq 0 ]; then \
 		echo "No vetting errors found"; \
-	else \
-		echo "$$OUTPUT"; \
-		exit 1; \
 	fi
 
 # Lint the code
 lint:
 	@echo "Linting..."
-	@command -v golint >/dev/null 2>&1 || { echo >&2 "golint is required but not installed. Aborting. Install with go get -u golang.org/x/lint/golint"; exit 1; }
-	@OUTPUT=$$(golint ./...); \
-	if [ -z "$$OUTPUT" ]; then \
+	@command -v $(GOLINT) >/dev/null 2>&1 || { echo >&2 "$(GOLINT) is required but not installed. Aborting. Install with $(GO) get -u golang.org/x/lint/golint"; exit 1; }
+	@$(GOLINT) ./...; \
+	if [ $$? -eq 0 ]; then \
 		echo "No linting errors found"; \
-	else \
-		echo "$$OUTPUT"; \
-		exit 1; \
 	fi
+
