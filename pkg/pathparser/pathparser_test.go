@@ -33,6 +33,31 @@ func TestParsePath(t *testing.T) {
 			path:     "/usr/local/bin",
 			expected: "/usr/local/bin",
 		},
+		{
+			name:     "returns normalised path (removes trailing slash)",
+			path:     "/usr/local/bin/",
+			expected: "/usr/local/bin",
+		},
+		{
+			name:     "returns normalised path (adds leading slash)",
+			path:     "usr/local/bin",
+			expected: "/usr/local/bin",
+		},
+		{
+			name:     "returns normalised path (adds leading slash and removes trailing slash)",
+			path:     "usr/local/bin/",
+			expected: "/usr/local/bin",
+		},
+		{
+			name:     "returns normalised path (even with multiple slashes)",
+			path:     "usr///local//bin////",
+			expected: "/usr/local/bin",
+		},
+		{
+			name:     "returns normalised path (even with multiple leding or trailing slashes)",
+			path:     "///usr/local/bin////",
+			expected: "/usr/local/bin",
+		},
 	}
 
 	for _, tt := range tests {

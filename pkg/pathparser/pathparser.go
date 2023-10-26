@@ -2,6 +2,7 @@ package pathparser
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/matthewchivers/rb/pkg/fsutil"
@@ -9,13 +10,35 @@ import (
 
 // ParsePath checks for validity and expands a path
 func ParsePath(fs fsutil.FSUtil, path string) (string, error) {
+	parsedPath := path
 	if strings.HasPrefix(path, "~") {
-		return expandTilde(fs, path)
+		tildePath, err := expandTilde(fs, parsedPath)
+		if err != nil {
+			return path, err
+		}
+		parsedPath = tildePath
+	} else if strings.HasPrefix(path, ".") {
+		dotPath, err := expandRelativePath(fs, parsedPath)
+		if err != nil {
+			return path, err
+		}
+		parsedPath = dotPath
 	}
-	if strings.HasPrefix(path, ".") {
-		return expandRelativePath(fs, path)
+	parsedPath = normalisePath(parsedPath)
+	return parsedPath, nil
+}
+
+func normalisePath(path string) string {
+	normalisedPath := path
+	// Replace multiple consecutive slashes with a single slash
+	normalisedPath = regexp.MustCompile(`//+`).ReplaceAllString(normalisedPath, "/")
+	// Ensure prefix is a slash
+	if !strings.HasPrefix(path, "/") {
+		normalisedPath = "/" + normalisedPath
 	}
-	return path, nil
+	// Remove trailing slash
+	normalisedPath = strings.TrimSuffix(normalisedPath, "/")
+	return normalisedPath
 }
 
 func expandTilde(fs fsutil.FSUtil, path string) (string, error) {
