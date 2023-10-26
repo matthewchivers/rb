@@ -6,10 +6,10 @@ GO := go
 GO_BUILD_FLAGS := -o bin/$(BINARY_NAME)
 GOLINT := golint
 
-.PHONY: build run clean test fmt vet lint
+.PHONY: build run clean test fmt vet lint modtidy
 
 # Build the binary to the bin directory
-build: fmt test vet lint
+build: fmt test vet lint modtidy
 	@echo "Building..."
 	@$(GO) build $(GO_BUILD_FLAGS); \
 	if [ $$? -eq 0 ]; then \
@@ -17,7 +17,7 @@ build: fmt test vet lint
 	fi
 
 # Run main.go (no build)
-run: fmt test vet lint
+run: fmt test vet lint modtidy
 	@echo "Running..."
 	@$(GO) run main.go
 
@@ -59,3 +59,10 @@ lint:
 		echo "No linting errors found"; \
 	fi
 
+# Tidy go modules
+modtidy:
+	@echo "Tidying modules..."
+	@$(GO) mod tidy; \
+	if [ $$? -eq 0 ]; then \
+		echo "Modules tidied successfully"; \
+	fi
