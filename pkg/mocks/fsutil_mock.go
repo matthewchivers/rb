@@ -5,12 +5,15 @@ import (
 	"strings"
 )
 
+// MockFSUtil is a mock implementation of the FSUtil interface
 type MockFSUtil struct{}
 
+// UserHomeDir returns a mock user home directory
 func (m *MockFSUtil) UserHomeDir() (string, error) {
 	return "/home/user", nil
 }
 
+// Abs returns a mock absolute path
 func (m *MockFSUtil) Abs(path string) (string, error) {
 	if path == "" {
 		return "", errors.New("invalid path")
