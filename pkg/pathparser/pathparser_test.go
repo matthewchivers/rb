@@ -1,4 +1,4 @@
-package pathresolver
+package pathparser
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/matthewchivers/rb/pkg/mocks"
 )
 
-func TestExpandPath(t *testing.T) {
+func TestParsePath(t *testing.T) {
 	fs := &mocks.MockFSUtil{}
 	tests := []struct {
 		name     string
@@ -37,7 +37,7 @@ func TestExpandPath(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actual, err := ExpandPath(fs, tt.path)
+			actual, err := ParsePath(fs, tt.path)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
