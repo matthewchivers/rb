@@ -17,7 +17,7 @@ build: fmt test vet lint
 	fi
 
 # Run main.go (no build)
-run:
+run: fmt test vet lint
 	@echo "Running..."
 	@$(GO) run main.go
 
