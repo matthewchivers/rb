@@ -17,8 +17,14 @@ type Config struct {
 type Rule struct {
 	Name      string    `yaml:"name"`
 	Directory string    `yaml:"directory"`
+	Nesting   Nesting   `yaml:"nesting,omitempty"`
 	Default   bool      `yaml:"default"`
 	Match     MatchRule `yaml:"match,omitempty"`
+}
+
+// Nesting is the struct representation of the nesting configuration in the config file
+type Nesting struct {
+	Pattern string `yaml:"pattern,omitempty"`
 }
 
 // MatchRule is the struct representation of the match rule in the config file

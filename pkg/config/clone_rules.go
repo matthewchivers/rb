@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/matthewchivers/rb/gitcore/types"
 	"github.com/matthewchivers/rb/pkg/fsutil"
@@ -42,13 +43,42 @@ func (c *Config) GetDirectory(repo *types.Repo) (string, error) {
 	return pathparser.ParsePath(fsutil.OSFileSystem{}, defaultRule.Directory)
 }
 
+// getRulePath returns the path to clone the repository into based on the supplied rule
 func getRulePath(rule Rule, repo *types.Repo) (string, error) {
 	rulePath, err := pathparser.ParsePath(fsutil.OSFileSystem{}, rule.Directory)
 	if err != nil {
 		return "", err
 	}
-	clonePath := rulePath + "/" + repo.Owner + "/" + repo.Name
-	return clonePath, nil
+
+	var clonePath string
+	if rule.Nesting.Pattern != "" {
+		nestedPath, err := getNestedPath(rule.Nesting.Pattern, repo)
+		if err != nil {
+			return "", err
+		}
+		clonePath = rulePath + nestedPath
+	} else {
+		clonePath = rulePath
+	}
+
+	return clonePath + "/" + repo.Name, nil
+}
+
+// getNestedPath processes the nesting pattern and returns the nested path.
+func getNestedPath(pattern string, repo *types.Repo) (string, error) {
+	// Validate the pattern
+	validPattern := regexp.MustCompile(`^([\w/]*\{(?:host|owner)\}[\w/]*)+$`)
+	if !validPattern.MatchString(pattern) {
+		return "", fmt.Errorf("invalid pattern: %s", pattern)
+	}
+	// Perform replacements
+	nestedPath := strings.ReplaceAll(pattern, "{host}", repo.Host)
+	nestedPath = strings.ReplaceAll(nestedPath, "{owner}", repo.Owner)
+	nestedPath, err := pathparser.ParsePath(fsutil.OSFileSystem{}, nestedPath)
+	if err != nil {
+		return "", err
+	}
+	return nestedPath, nil
 }
 
 func checkRepoMatches(rule Rule, repo *types.Repo) bool {
