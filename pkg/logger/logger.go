@@ -13,6 +13,7 @@ var (
 )
 
 const (
+	// LevelNone is the log level for no messages
 	LevelNone = iota
 	// LevelInfo is the log level for info messages
 	LevelInfo = iota
