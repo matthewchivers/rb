@@ -18,6 +18,62 @@ func TestLogger(t *testing.T) {
 		expected string
 	}{
 		{
+			name:     "Error Message - Level None",
+			logLevel: LevelNone,
+			logFunc: func(l Logger) {
+				l.Errorf("test %s", "message")
+			},
+			expected: "ERROR: test message",
+		},
+		{
+			name:     "Error Message - Level Info",
+			logLevel: LevelInfo,
+			logFunc: func(l Logger) {
+				l.Errorf("test %s", "message")
+			},
+			expected: "ERROR: test message",
+		},
+		{
+			name:     "Error Message - Level Debug",
+			logLevel: LevelDebug,
+			logFunc: func(l Logger) {
+				l.Errorf("test %s", "message")
+			},
+			expected: "ERROR: test message",
+		},
+		{
+			name:     "Warn Message - Level None",
+			logLevel: LevelNone,
+			logFunc: func(l Logger) {
+				l.Warnf("test %s", "message")
+			},
+			expected: "WARN: test message",
+		},
+		{
+			name:     "Warn Message - Level Info",
+			logLevel: LevelInfo,
+			logFunc: func(l Logger) {
+				l.Warnf("test %s", "message")
+			},
+			expected: "WARN: test message",
+		},
+		{
+			name:     "Warn Message - Level Debug",
+			logLevel: LevelDebug,
+			logFunc: func(l Logger) {
+				l.Warnf("test %s", "message")
+			},
+			expected: "WARN: test message",
+		},
+		{
+			name:     "Info Message - Level None",
+			logLevel: LevelNone,
+			logFunc: func(l Logger) {
+				l.Infof("test %s", "message")
+			},
+			expected: "",
+		},
+		{
 			name:     "Info Message - Level Info",
 			logLevel: LevelInfo,
 			logFunc: func(l Logger) {
@@ -34,12 +90,12 @@ func TestLogger(t *testing.T) {
 			expected: "INFO: test message",
 		},
 		{
-			name:     "Debug Message - Level Debug",
-			logLevel: LevelDebug,
+			name:     "Debug Message - Level None",
+			logLevel: LevelNone,
 			logFunc: func(l Logger) {
 				l.Debugf("test %s", "message")
 			},
-			expected: "DEBUG: test message",
+			expected: "",
 		},
 		{
 			name:     "Debug Message - Level Info",
@@ -48,6 +104,14 @@ func TestLogger(t *testing.T) {
 				l.Debugf("test %s", "message")
 			},
 			expected: "",
+		},
+		{
+			name:     "Debug Message - Level Debug",
+			logLevel: LevelDebug,
+			logFunc: func(l Logger) {
+				l.Debugf("test %s", "message")
+			},
+			expected: "DEBUG: test message",
 		},
 	}
 

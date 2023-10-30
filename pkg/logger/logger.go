@@ -13,6 +13,7 @@ var (
 )
 
 const (
+	LevelNone = iota
 	// LevelInfo is the log level for info messages
 	LevelInfo = iota
 	// LevelDebug is the log level for debug messages
@@ -58,8 +59,10 @@ func (l *DefaultLogger) Debugf(format string, args ...interface{}) {
 
 // Infof logs an info message
 func (l *DefaultLogger) Infof(format string, args ...interface{}) {
-	fmt.Fprintf(l.writer, "INFO: "+format, args...)
-	fmt.Print("\n")
+	if l.logLevel >= LevelInfo {
+		fmt.Fprintf(l.writer, "INFO: "+format, args...)
+		fmt.Print("\n")
+	}
 }
 
 // Warnf logs a warning message
