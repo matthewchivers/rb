@@ -43,7 +43,7 @@ func Clone(repositoryURL, customPath, customRule string) {
 	err = gitutils.CloneGitRepo(repositoryURL, cloneTargetPath)
 	if err != nil {
 		fmt.Println("Error cloning repository:", err)
+	} else {
+		fmt.Printf("Cloned repository: %s\nInto directory: %s\n", repositoryURL, cloneTargetPath)
 	}
-
-	fmt.Printf("Cloned repository %s into %s\n", repositoryURL, cloneTargetPath)
 }
