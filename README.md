@@ -27,42 +27,7 @@ rb clone [git_repo]
 
 ## Configuration 🛠️
 
-Define rules in a `config.yaml` file located at `~/.config/rb/`. Each rule should specify a target directory, and can include a nesting pattern and matching criteria for repositories.
-
-### Examples:
-
-```yaml
-# Example 1: Clone "https://github.com/matthewchivers/rb.git" to "~/code/github.com/matthewchivers/rb"
-rules:
-  - name: "example rule"
-    directory: "~/code"
-    nesting:
-      pattern: "{host}/{owner}"
-    match:
-      repo:
-        owner: "matthewchivers"
-
-# Example 2: Default rule when no other rule matches
-rules:
-  - name: "default rule"
-    directory: "~/code"
-    default: true
-
-# Example 3: Rule assessment (First-match basis)
-# Any repo named `rb` will be cloned to `~/rb-project` as it's the first matching rule.
-rules:
-  - name: "rb rule"
-    directory: "~/rb-project"
-    match:
-      repo:
-        name: "rb"
-  - name: "another rb rule"
-    directory: "~/rb-newproject"
-    match:
-      repo:
-        name: "rb"
-```
-Rules are evaluated on a first-match basis. In Example 3, any repo named rb will always match the first rule, hence it will be cloned to ~/rb-project and not ~/rb-newproject.
+To configure `rb`, place a `config.yaml` file in `~/.config/rb/`. This file defines the rules for cloning and organising repositories. For a comprehensive guide on crafting your configuration, please refer to [/examples/config.md](/examples/config.md).
 
 ## Contributions 👨‍💻👩‍💻
 Feel free to submit pull requests, issues, or feature requests. For major changes, kindly open an issue first.

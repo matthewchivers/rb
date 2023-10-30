@@ -1,0 +1,14 @@
+directories:
+  - name: "my-projects"
+    path: "/home/my/projects"
+
+clone_rules:
+  - name: "my-first-rule"
+    default: true
+    directory_name: "my-projects"
+    nesting_pattern: "{host}/{owner}"
+    match:
+      repository:
+        name: "repo-name"
+        owner: "my-github-account"
+        host: "github.com"
