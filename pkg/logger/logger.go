@@ -52,22 +52,26 @@ func newLogger(level int) *DefaultLogger {
 func (l *DefaultLogger) Debugf(format string, args ...interface{}) {
 	if l.logLevel >= LevelDebug {
 		fmt.Fprintf(l.writer, "DEBUG: "+format, args...)
+		fmt.Print("\n")
 	}
 }
 
 // Infof logs an info message
 func (l *DefaultLogger) Infof(format string, args ...interface{}) {
 	fmt.Fprintf(l.writer, "INFO: "+format, args...)
+	fmt.Print("\n")
 }
 
 // Warnf logs a warning message
 func (l *DefaultLogger) Warnf(format string, args ...interface{}) {
 	fmt.Fprintf(l.writer, "WARN: "+format, args...)
+	fmt.Print("\n")
 }
 
 // Errorf logs an error message
 func (l *DefaultLogger) Errorf(format string, args ...interface{}) {
 	fmt.Fprintf(l.writer, "ERROR: "+format, args...)
+	fmt.Print("\n")
 }
 
 // SetLogLevel sets the log level
