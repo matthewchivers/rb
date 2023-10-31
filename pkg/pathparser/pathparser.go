@@ -10,35 +10,29 @@ import (
 
 // ParsePath checks for validity and expands a path
 func ParsePath(path string) (string, error) {
-	parsedPath := path
-	if strings.HasPrefix(path, "~") {
-		tildePath, err := expandTilde(parsedPath)
-		if err != nil {
-			return path, err
-		}
-		parsedPath = tildePath
-	} else if strings.HasPrefix(path, ".") {
-		dotPath, err := expandRelativePath(parsedPath)
-		if err != nil {
-			return path, err
-		}
-		parsedPath = dotPath
+	parsedPath := normalisePath(path)
+	var err error
+	switch {
+	case strings.HasPrefix(path, "~"):
+		parsedPath, err = expandTilde(path)
+	case strings.HasPrefix(path, "."):
+		parsedPath, err = expandRelativePath(path)
 	}
-	parsedPath = normalisePath(parsedPath)
+	if err != nil {
+		return path, err
+	}
 	return parsedPath, nil
 }
 
 func normalisePath(path string) string {
-	normalisedPath := path
 	// Replace multiple consecutive slashes with a single slash
-	normalisedPath = regexp.MustCompile(`//+`).ReplaceAllString(normalisedPath, "/")
+	normalisedPath := regexp.MustCompile(`//+`).ReplaceAllString(path, "/")
 	// Ensure prefix is a slash
 	if !strings.HasPrefix(path, "/") {
 		normalisedPath = "/" + normalisedPath
 	}
 	// Remove trailing slash
-	normalisedPath = strings.TrimSuffix(normalisedPath, "/")
-	return normalisedPath
+	return strings.TrimSuffix(normalisedPath, "/")
 }
 
 func expandTilde(path string) (string, error) {
