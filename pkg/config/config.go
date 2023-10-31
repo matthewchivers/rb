@@ -3,7 +3,6 @@ package config
 import (
 	"os"
 
-	"github.com/matthewchivers/rb/pkg/fsutil"
 	rblogger "github.com/matthewchivers/rb/pkg/logger"
 	"github.com/matthewchivers/rb/pkg/pathparser"
 	"gopkg.in/yaml.v2"
@@ -55,8 +54,7 @@ type Config struct {
 // LoadConfig loads the config file from the specified path
 func LoadConfig(filePath string) (*Config, error) {
 	logger.Infof("Loading config file from %s", filePath)
-	osfs := fsutil.OSFileSystem{}
-	parsedPath, err := pathparser.ParsePath(osfs, filePath)
+	parsedPath, err := pathparser.ParsePath(filePath)
 	if err != nil {
 		logger.Errorf("Could not parse path: %s", err)
 		return nil, err

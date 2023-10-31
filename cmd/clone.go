@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/matthewchivers/rb/cmd/handlers"
-	"github.com/matthewchivers/rb/pkg/fsutil"
 	"github.com/matthewchivers/rb/pkg/pathparser"
 	"github.com/spf13/cobra"
 )
@@ -41,6 +40,5 @@ func checkCustomPath(customPath string) (string, error) {
 	if customPath == "" {
 		return customPath, nil
 	}
-	osfs := fsutil.OSFileSystem{}
-	return pathparser.ParsePath(osfs, customPath)
+	return pathparser.ParsePath(customPath)
 }

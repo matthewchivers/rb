@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/matthewchivers/rb/gitcore/types"
-	"github.com/matthewchivers/rb/pkg/fsutil"
 	"github.com/matthewchivers/rb/pkg/pathparser"
 )
 
@@ -84,7 +83,7 @@ func getNestedPath(pattern string, repo *types.Repo) (string, error) {
 	// Perform replacements
 	nestedPath := strings.ReplaceAll(pattern, "{host}", repo.Host)
 	nestedPath = strings.ReplaceAll(nestedPath, "{owner}", repo.Owner)
-	nestedPath, err := pathparser.ParsePath(fsutil.OSFileSystem{}, nestedPath)
+	nestedPath, err := pathparser.ParsePath(nestedPath)
 	if err != nil {
 		return "", err
 	}

@@ -2,23 +2,23 @@ package pathparser
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
-
-	"github.com/matthewchivers/rb/pkg/fsutil"
 )
 
 // ParsePath checks for validity and expands a path
-func ParsePath(fs fsutil.FSUtil, path string) (string, error) {
+func ParsePath(path string) (string, error) {
 	parsedPath := path
 	if strings.HasPrefix(path, "~") {
-		tildePath, err := expandTilde(fs, parsedPath)
+		tildePath, err := expandTilde(parsedPath)
 		if err != nil {
 			return path, err
 		}
 		parsedPath = tildePath
 	} else if strings.HasPrefix(path, ".") {
-		dotPath, err := expandRelativePath(fs, parsedPath)
+		dotPath, err := expandRelativePath(parsedPath)
 		if err != nil {
 			return path, err
 		}
@@ -41,16 +41,16 @@ func normalisePath(path string) string {
 	return normalisedPath
 }
 
-func expandTilde(fs fsutil.FSUtil, path string) (string, error) {
-	home, err := fs.UserHomeDir()
+func expandTilde(path string) (string, error) {
+	home, err := os.UserHomeDir()
 	if err != nil {
 		return path, fmt.Errorf("could not expand tilde path: %v", err)
 	}
 	return strings.Replace(path, "~", home, 1), nil
 }
 
-func expandRelativePath(fs fsutil.FSUtil, path string) (string, error) {
-	absPath, err := fs.Abs(path)
+func expandRelativePath(path string) (string, error) {
+	absPath, err := filepath.Abs(path)
 	if err != nil {
 		return path, fmt.Errorf("could not expand relative path: %v", err)
 	}

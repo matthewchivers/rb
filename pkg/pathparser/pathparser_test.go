@@ -1,13 +1,16 @@
 package pathparser
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
 	"testing"
-
-	"github.com/matthewchivers/rb/pkg/mocks"
 )
 
 func TestParsePath(t *testing.T) {
-	fs := &mocks.MockFSUtil{}
+	home, _ := os.UserHomeDir()
+	absPathCurrent, _ := filepath.Abs(".")
+	absPathParent, _ := filepath.Abs("..")
 	tests := []struct {
 		name     string
 		path     string
@@ -16,17 +19,17 @@ func TestParsePath(t *testing.T) {
 		{
 			name:     "expands tilde path",
 			path:     "~/Documents",
-			expected: "/home/user/Documents",
+			expected: fmt.Sprintf("%s/Documents", home),
 		},
 		{
 			name:     "expands relative current path",
 			path:     "./config.yml",
-			expected: "/current/config.yml",
+			expected: fmt.Sprintf("%s/config.yml", absPathCurrent),
 		},
 		{
 			name:     "expands relative parent path",
 			path:     "../config.yml",
-			expected: "/parent/config.yml",
+			expected: fmt.Sprintf("%s/config.yml", absPathParent),
 		},
 		{
 			name:     "returns path as is",
@@ -62,7 +65,7 @@ func TestParsePath(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actual, err := ParsePath(fs, tt.path)
+			actual, err := ParsePath(tt.path)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
